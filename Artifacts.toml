@@ -1,0 +1,47 @@
+[isnet-general-use]
+git-tree-sha1 = "4bfcb1ec5ec8f1d262a98e21a68a10537c48eb2b"
+lazy = true
+
+    [[isnet-general-use.download]]
+    sha256 = "3042fae3603844fb2f8b742c83ce8cf507919aa6dc75c307ecac628a22f1068a"
+    url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/isnet-general-use.tar.gz"
+
+[silueta]
+git-tree-sha1 = "0383be7937c209f66148cfae903894332db41eb9"
+lazy = true
+
+    [[silueta.download]]
+    sha256 = "85212a23f67bf25224dd44329cf95b108c10ee3093e97dc3e5c18d7268d7ff91"
+    url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/silueta.tar.gz"
+
+[u2net]
+git-tree-sha1 = "6b6504d8c753fadcbd3bbd3994af21a11d443582"
+lazy = true
+
+    [[u2net.download]]
+    sha256 = "fa6531f668606ccb27f6c34216fe6ba31480a5b85b6948cce9ae170d5269c371"
+    url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/u2net.tar.gz"
+
+[u2net_cloth_seg]
+git-tree-sha1 = "9b023094e5e319902345c970a13439478bf81799"
+lazy = true
+
+    [[u2net_cloth_seg.download]]
+    sha256 = "0f814bc2aba33e08cb06e5ee289e8ee5937c5358c121e3f17e1c072473d74d68"
+    url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/u2net_cloth_seg.tar.gz"
+
+[u2net_human_seg]
+git-tree-sha1 = "80ecba073424f3631cec96b00e5de45ae656eda0"
+lazy = true
+
+    [[u2net_human_seg.download]]
+    sha256 = "13f39513e10e4d57a417386fb82495913f3c3815801757d3e0dd12c495802efc"
+    url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/u2net_human_seg.tar.gz"
+
+[u2netp]
+git-tree-sha1 = "faa52de896b0b65716b46a7f646e8b413b7f1c47"
+lazy = true
+
+    [[u2netp.download]]
+    sha256 = "a491298149314654d6a3aa18b8282b0161108b32ffb899b23a260ba6e8b37e05"
+    url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/u2netp.tar.gz"
