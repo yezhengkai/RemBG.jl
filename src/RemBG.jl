@@ -11,4 +11,6 @@ export U2Net, U2Netp, U2NetClothSeg, U2NetHumanSeg, Silueta, ISNetGeneralUse, ne
 include("bg.jl")
 export remove
 
+include("utils.jl")
+
 end
