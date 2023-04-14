@@ -5,7 +5,6 @@ exampledir(args...) = joinpath(@__DIR__, args...);
 img = load(exampledir("animal-1.jpg"))::Matrix{<:Colorant};
 img_num = collect(channelview(img))::Array{<:Number}
 
-
 output_img_num = remove(img_num);
 output_img = remove(img);
 

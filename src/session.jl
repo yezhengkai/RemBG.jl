@@ -3,7 +3,9 @@ U2NETP_ONNX_PATH = joinpath(artifact"u2netp", "u2netp.onnx")
 U2NET_CLOTH_SEG_ONNX_PATH = joinpath(artifact"u2net_cloth_seg", "u2net_cloth_seg.onnx")
 U2NET_HUMAN_SEG_ONNX_PATH = joinpath(artifact"u2net_human_seg", "u2net_human_seg.onnx")
 SILUETA_ONNX_PATH = joinpath(artifact"silueta", "silueta.onnx")
-ISNET_GENERAL_USE_ONNX_PATH = joinpath(artifact"isnet-general-use", "isnet-general-use.onnx")
+ISNET_GENERAL_USE_ONNX_PATH = joinpath(
+    artifact"isnet-general-use", "isnet-general-use.onnx"
+)
 
 abstract type MattingModel end
 struct U2NetModel <: MattingModel end
@@ -56,27 +58,29 @@ end
 
 function predict(session::SimpleSession, img::Matrix{<:Colorant})
 
-    # input size: (batch_size, 3, 320, 320)
+    # Preprocessing
     small_img = imresize(img, 320, 320)
     img_array = collect(channelview(small_img))  # type: Array {N0f8, 3}, size: (channel(RGB), hight, width)
     img_array = collect(rawview(img_array))  # type: Array {UInt8, 3}, size: (channel(RGB), hight, width)
     img_array = img_array / maximum(img_array)
-
-    tmp_img = zeros(Float32, 1, 3, 320, 320)
+    tmp_img = zeros(Float32, 1, 3, 320, 320)  # input size: (batch_size, 3, 320, 320)
     tmp_img[1, 1, :, :] = (img_array[1, :, :] .- 0.485) / 0.229
     tmp_img[1, 2, :, :] = (img_array[2, :, :] .- 0.456) / 0.224
     tmp_img[1, 3, :, :] = (img_array[3, :, :] .- 0.406) / 0.225
-    input = Dict("input.1" => tmp_img)
-    # # output size: (batch_size, 1, height, width)
-    # result = INFERENCE_SESSION[](input)
-    # mask = result["1959"]
-    pred = session.onnx_session(input)["1959"][:, 1, :, :]
 
+    # Predict
+    input = Dict(session.onnx_session.input_names[1] => tmp_img)
+    # output size: (batch_size, 1, height, width)
+    pred = session.onnx_session(input)[session.onnx_session.output_names[1]][:, 1, :, :]
+
+    # Postprocessing
     ma = maximum(pred)
     mi = minimum(pred)
     pred = (pred .- mi) / (ma .- mi)
     pred = dropdims(pred; dims=1)
 
+    # Creates a view of the numeric array `pred`,
+    # interpreting successive elements of `pred` as if they were channels of Colorant `Gray`.
     mask = colorview(Gray, pred)
     mask = imresize(mask, size(img))
     return [mask]

@@ -5,7 +5,6 @@ using Images
 using Artifacts
 using LazyArtifacts
 
-
 include("session.jl")
 export U2Net, U2Netp, U2NetClothSeg, U2NetHumanSeg, Silueta, ISNetGeneralUse, new_session
 

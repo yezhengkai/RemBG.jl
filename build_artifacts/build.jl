@@ -22,8 +22,8 @@ mkdir(build_dir)
 
 # Create model repo
 repo_id = "yezhengkai/RemBG"
-HF.create(HF.Model(id=repo_id, private=false))  # BUG
-repo = HF.info(HF.Model(id=repo_id))
+HF.create(HF.Model(; id=repo_id, private=false))  # BUG
+repo = HF.info(HF.Model(; id=repo_id))
 
 # Package up models
 for model_path in readdir(model_dir; join=true)
@@ -47,9 +47,9 @@ for model_path in readdir(model_dir; join=true)
     bind_artifact!(
         artifact_toml,
         model_name,
-        product_hash,
+        product_hash;
         force=true,
         lazy=true,
-        download_info=Tuple[(remote_url, download_hash)]
+        download_info=Tuple[(remote_url, download_hash)],
     )
 end
