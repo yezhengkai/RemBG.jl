@@ -1,5 +1,21 @@
-# https://medium.com/@bowlescompling/m2-1-softmax-in-julia-1498901f741c
-# https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.log_softmax.html#scipy.special.log_softmax
+# References:
+# - https://medium.com/@bowlescompling/m2-1-softmax-in-julia-1498901f741c
+# - https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.log_softmax.html#scipy.special.log_softmax
+
+# abstract exponentiation function, subtract max for numerical stability
+_exp(x) = exp.(x .- maximum(x))
+# abstract exponentiation function, subtract max for numerical stability and scale ny theta
+_exp(x, θ) = exp.(x .- maximum(x) * θ)
+# softmax algorithm expects stabilized exponentiated e
+_softmax(e, d) = (e ./ sum(e, dims=d))
+# top level softmax function
+function softmax(X, dims)
+    _softmax(_exp(X), dims)
+end
+function softmax(X, dims, θ)
+    _softmax(_exp(X, θ), dims)
+end
+
 """
     log_softmax(x)
     log_softmax(x, dims)
