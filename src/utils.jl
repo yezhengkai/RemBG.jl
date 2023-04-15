@@ -7,13 +7,13 @@ _exp(x) = exp.(x .- maximum(x))
 # abstract exponentiation function, subtract max for numerical stability and scale ny theta
 _exp(x, θ) = exp.(x .- maximum(x) * θ)
 # softmax algorithm expects stabilized exponentiated e
-_softmax(e, d) = (e ./ sum(e, dims=d))
+_softmax(e, d) = (e ./ sum(e; dims=d))
 # top level softmax function
 function softmax(X, dims)
-    _softmax(_exp(X), dims)
+    return _softmax(_exp(X), dims)
 end
 function softmax(X, dims, θ)
-    _softmax(_exp(X, θ), dims)
+    return _softmax(_exp(X, θ), dims)
 end
 
 """
