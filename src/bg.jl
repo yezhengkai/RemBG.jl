@@ -7,14 +7,6 @@ function naive_cutout(img, mask)
     return cutout
 end
 
-function get_concat_v_multi(imgs)
-    return reduce(get_concat_v, imgs)
-end
-
-function get_concat_v(img1, img2)
-    return vcat(img2, img1)
-end
-
 function post_process(mask) end
 
 function apply_background_color(img, color) end
@@ -57,9 +49,9 @@ function remove(
         push!(cutouts, cutout)
     end
 
-    # get cutout by concatenating cutouts
+    # get cutout by concatenating cutouts vertically
     if length(cutouts) > 0
-        cutout = get_concat_v_multi(cutouts)
+        cutout = reduce(vcat, cutouts)
     end
 
     # apply background color
