@@ -20,7 +20,9 @@ session = new_session(ISNetGeneralUse);
 output_img_num = remove(img_num; session=session);
 output_img = remove(img; session=session);
 
-# TODO
-# session = new_session(U2NetClothSeg);
-# output_img_num = remove(img_num; session=session);
-# output_img = remove(img; session=session)
+# cloth
+img = load(exampledir("cloth-1.jpg"))::Matrix{<:Colorant};
+img_num = copy(channelview(img))::Array{<:Number};
+session = new_session(U2NetClothSeg);
+output_img_num = remove(img_num; session=session);
+output_img = remove(img; session=session);
