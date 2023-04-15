@@ -70,7 +70,7 @@ function predict(session::SimpleSession, img::Matrix{<:Colorant})
 
     # Predict
     input = Dict(session.onnx_session.input_names[1] => tmp_img)
-    # output size: (batch_size, 1, height, width)
+    # output size: (batch_size, 1, 320, 320)
     pred = session.onnx_session(input)[session.onnx_session.output_names[1]][:, 1, :, :]
 
     # Postprocessing
@@ -100,7 +100,7 @@ function predict(session::DisSession, img::Matrix{<:Colorant})
 
     # Predict
     input = Dict(session.onnx_session.input_names[1] => tmp_img)
-    # output size: (batch_size, 1, height, width)
+    # output size: (batch_size, 1, 1024, 1024)
     pred = session.onnx_session(input)[session.onnx_session.output_names[1]][:, 1, :, :]
 
     # Postprocessing
@@ -116,49 +116,26 @@ function predict(session::DisSession, img::Matrix{<:Colorant})
     return [mask]
 end
 
-# TODO
-# function predict(session::ClothSession, img::Matrix{<:Colorant})
+function predict(session::ClothSession, img::Matrix{<:Colorant})
 
-#     # Preprocessing
-#     small_img = imresize(img, 768, 768)
-#     img_array = copy(channelview(small_img))  # type: Array {N0f8, 3}, size: (channel(RGB), hight, width)
-#     img_array = copy(rawview(img_array))  # type: Array {UInt8, 3}, size: (channel(RGB), hight, width)
-#     img_array = img_array / maximum(img_array)
-#     tmp_img = zeros(Float32, 1, 3, 768, 768)  # input size: (batch_size, 3, 768, 768)
-#     tmp_img[1, 1, :, :] = (img_array[1, :, :] .- 0.485) / 0.229
-#     tmp_img[1, 2, :, :] = (img_array[2, :, :] .- 0.456) / 0.224
-#     tmp_img[1, 3, :, :] = (img_array[3, :, :] .- 0.406) / 0.225
+    # Preprocessing
+    small_img = imresize(img, 768, 768)
+    img_array = copy(channelview(small_img))  # type: Array {N0f8, 3}, size: (channel(RGB), hight, width)
+    img_array = copy(rawview(img_array))  # type: Array {UInt8, 3}, size: (channel(RGB), hight, width)
+    img_array = img_array / maximum(img_array)
+    tmp_img = zeros(Float32, 1, 3, 768, 768)  # input size: (batch_size, 3, 768, 768)
+    tmp_img[1, 1, :, :] = (img_array[1, :, :] .- 0.485) / 0.229
+    tmp_img[1, 2, :, :] = (img_array[2, :, :] .- 0.456) / 0.224
+    tmp_img[1, 3, :, :] = (img_array[3, :, :] .- 0.406) / 0.225
 
-#     # Predict
-#     input = Dict(session.onnx_session.input_names[1] => tmp_img)
-#     # output size: (batch_size, 1, height, width)
-#     pred = session.onnx_session(input)
-#     println(size(pred[session.onnx_session.output_names[1]]))
-#     pred = log_softmax(pred[session.onnx_session.output_names[1]], 1)
-#     # pred = argmax(pred; dims=1)
-#     println(size(pred))
-#     pred = dropdims(pred; dims=1)
-#     println(size(pred))
+    # Predict
+    input = Dict(session.onnx_session.input_names[1] => tmp_img)
+    # output size: (batch_size, 4, 768, 768)
+    pred = session.onnx_session(input)[session.onnx_session.output_names[1]]
+    pred = softmax(pred, 2)
+    pred = dropdims(pred; dims=1) # size: (4, 768, 768)
 
-#     mask = colorview(RGBA, pred)
-#     mask = imresize(mask, size(img))
+    mask = imresize(pred, 4, size(img)...)
 
-#     masks = []
-
-#     mask1 = copy(mask)
-#     # mask1.putpalette(pallete1)
-#     # mask1 = mask1.convert("RGB").convert("L")
-#     push!(masks, mask1)
-
-#     mask2 = copy(mask)
-#     # mask1.putpalette(pallete1)
-#     # mask1 = mask1.convert("RGB").convert("L")
-#     push!(masks, mask2)
-
-#     mask3 = copy(mask)
-#     # mask1.putpalette(pallete1)
-#     # mask1 = mask1.convert("RGB").convert("L")
-#     push!(masks, mask3)
-
-#     return masks
-# end
+    return [mask[2, :, :], mask[3, :, :], mask[4, :, :]]
+end
