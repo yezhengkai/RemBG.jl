@@ -10,7 +10,21 @@ References:
 =#
 
 using Pkg.Artifacts
+using Pkg.GitTools
 import HuggingFaceHub as HF
+
+"""Copied from https://github.com/simeonschaub/ArtifactUtils.jl/blob/main/src/ArtifactUtils.jl"""
+function copy_mode(src, dst)
+    if !isdir(dst)
+        chmod(dst, UInt(GitTools.gitmode(string(src))))
+        return nothing
+    end
+    for name in readdir(dst)
+        sub_src = joinpath(src, name)
+        sub_dst = joinpath(dst, name)
+        copy_mode(sub_src, sub_dst)
+    end
+end
 
 model_dir = abspath(joinpath(@__DIR__, "models"))
 build_dir = abspath(joinpath(@__DIR__, "build"))
@@ -34,6 +48,7 @@ for model_path in readdir(model_dir; join=true)
 
     product_hash = create_artifact() do artifact_dir
         cp(model_path, joinpath(artifact_dir, basename(model_path)); force=true)
+        Sys.iswindows() && copy_mode(model_path, artifact_dir)
     end
     @info "Create artifact:" product_hash
 

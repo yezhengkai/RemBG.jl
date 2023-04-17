@@ -1,5 +1,5 @@
 [isnet-general-use]
-git-tree-sha1 = "4bfcb1ec5ec8f1d262a98e21a68a10537c48eb2b"
+git-tree-sha1 = "e77a8d33922e9add231ce30f827fc1c715943630"
 lazy = true
 
     [[isnet-general-use.download]]
@@ -7,7 +7,7 @@ lazy = true
     url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/isnet-general-use.tar.gz"
 
 [silueta]
-git-tree-sha1 = "0383be7937c209f66148cfae903894332db41eb9"
+git-tree-sha1 = "16fac82f2ad436e3578b3059833a8566954047dc"
 lazy = true
 
     [[silueta.download]]
@@ -15,7 +15,7 @@ lazy = true
     url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/silueta.tar.gz"
 
 [u2net]
-git-tree-sha1 = "6b6504d8c753fadcbd3bbd3994af21a11d443582"
+git-tree-sha1 = "dfa2606742eac6c65f665a1588b0763a0b780c8b"
 lazy = true
 
     [[u2net.download]]
@@ -23,7 +23,7 @@ lazy = true
     url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/u2net.tar.gz"
 
 [u2net_cloth_seg]
-git-tree-sha1 = "9b023094e5e319902345c970a13439478bf81799"
+git-tree-sha1 = "d138c33c9bdd222e2e3589a2123deda552f68a36"
 lazy = true
 
     [[u2net_cloth_seg.download]]
@@ -31,7 +31,7 @@ lazy = true
     url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/u2net_cloth_seg.tar.gz"
 
 [u2net_human_seg]
-git-tree-sha1 = "80ecba073424f3631cec96b00e5de45ae656eda0"
+git-tree-sha1 = "da04cd56dcf9b0d081821e8cc70e603530853623"
 lazy = true
 
     [[u2net_human_seg.download]]
@@ -39,7 +39,7 @@ lazy = true
     url = "https://huggingface.co/yezhengkai/RemBG/resolve/main/u2net_human_seg.tar.gz"
 
 [u2netp]
-git-tree-sha1 = "faa52de896b0b65716b46a7f646e8b413b7f1c47"
+git-tree-sha1 = "026cb2441dca20f96fae33aa3bfd01502cdc67bd"
 lazy = true
 
     [[u2netp.download]]
