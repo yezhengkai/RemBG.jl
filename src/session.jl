@@ -15,11 +15,22 @@ struct U2NetHumanSegModel <: MattingModel end
 struct SiluetaModel <: MattingModel end
 struct ISNetGeneralUseModel <: MattingModel end
 
+"""`U2NetModel` object. `U2NetModel` is a subtype of `MattingModel`."""
 const U2Net = U2NetModel()
+
+"""`U2NetpModel` object. `U2NetpModel` is a subtype of `MattingModel`."""
 const U2Netp = U2NetpModel()
+
+"""`U2NetClothSegModel` object. `U2NetClothSegModel` is a subtype of `MattingModel`."""
 const U2NetClothSeg = U2NetClothSegModel()
+
+"""`U2NetHumanSegModel` object. `U2NetHumanSegModel` is a subtype of `MattingModel`."""
 const U2NetHumanSeg = U2NetHumanSegModel()
+
+"""`SiluetaModel` object. `SiluetaModel` is a subtype of `MattingModel`."""
 const Silueta = SiluetaModel()
+
+"""`ISNetGeneralUseModel` object. `ISNetGeneralUseModel` is a subtype of `MattingModel`."""
 const ISNetGeneralUse = ISNetGeneralUseModel()
 
 abstract type InferenceSession end
@@ -37,6 +48,16 @@ struct DisSession <: InferenceSession
     onnx_session::OX.InferenceSession
 end
 
+"""
+    new_session(::MattingModel)
+
+Constructs an `InferenceSession` object by input type.
+
+# Examples
+```julia
+session = new_session(U2Net)
+```
+"""
 function new_session(::U2NetModel)
     return SimpleSession("U2Net", OX.load_inference(U2NET_ONNX_PATH))
 end
@@ -131,6 +152,7 @@ function predict(session::ClothSession, img::Matrix{<:Colorant})
     # Predict
     input = Dict(session.onnx_session.input_names[1] => tmp_img)
     # output size: (batch_size, 4, 768, 768)
+    # The 4 channels represent in order "Background", "Upper Body Clothes", "Lower Body Clothes" and "Full Body Clothes".
     pred = session.onnx_session(input)[session.onnx_session.output_names[1]]
     pred = softmax(pred, 2)
     pred = dropdims(pred; dims=1) # size: (4, 768, 768)

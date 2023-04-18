@@ -4,11 +4,25 @@
 
 # abstract exponentiation function, subtract max for numerical stability
 _exp(x) = exp.(x .- maximum(x))
-# abstract exponentiation function, subtract max for numerical stability and scale ny theta
+# abstract exponentiation function, subtract max for numerical stability and scale by theta
 _exp(x, θ) = exp.(x .- maximum(x) * θ)
 # softmax algorithm expects stabilized exponentiated e
 _softmax(e, d) = (e ./ sum(e; dims=d))
-# top level softmax function
+"""
+    softmax(X, dims)
+    softmax(X, dims, θ)
+
+Compute the softmax function along the `dims` dimension of the array `X`. You can adjust the scaling factor `θ`.
+
+# Examples
+```julia-repl
+julia> x = [1000.0 1.0; 1000.0 1.0];
+julia> y = RemBG.softmax(x, 2)
+2×2 Matrix{Float64}:
+ 1.0  0.0
+ 1.0  0.0
+```
+"""
 function softmax(X, dims)
     return _softmax(_exp(X), dims)
 end
@@ -38,8 +52,8 @@ sum to 1 along the specified axis. If `x` is a scalar, a scalar is
 returned.
 
 # Examples
-```julia
-julia> x = [1000.0 1.0];
+```julia-repl
+julia> x = [1000.0, 1.0];
 julia> y = log_softmax(x)
 2-element Vector{Float64}:
     0.0

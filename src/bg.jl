@@ -11,6 +11,17 @@ function post_process(mask) end
 
 function apply_background_color(img, color) end
 
+"""
+    remove(img; kwargs...)
+
+Remove background from image.
+
+# Examples
+```julia
+remove(img)
+remove(img; session=new_session(U2Net))  # or use specific session
+```
+"""
 function remove(img::Array{<:Number}; kwargs...)::Array{<:Number}
     # unify image channels to 3
     if ndims(img) == 2
