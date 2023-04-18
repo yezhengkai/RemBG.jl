@@ -20,12 +20,12 @@ end
     @test isa(new_session(ISNetGeneralUse), RemBG.DisSession)
 end
 
-
 exampledir(args...) = joinpath(@__DIR__, "..", "examples", args...)
 img_animal = load(exampledir("animal-1.jpg"))
 img_cloth = load(exampledir("cloth-1.jpg"))
 @testset "remove" begin
     @test size(img_animal) == size(remove(img_animal))
     @test size(img_animal) == size(remove(img_animal; session=new_session(ISNetGeneralUse)))
-    @test size(img_cloth) .* (3, 1) == size(remove(img_cloth; session=new_session(U2NetClothSeg)))
+    @test size(img_cloth) .* (3, 1) ==
+        size(remove(img_cloth; session=new_session(U2NetClothSeg)))
 end
