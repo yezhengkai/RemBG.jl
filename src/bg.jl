@@ -43,7 +43,9 @@ function remove(img::Array{<:Number}; kwargs...)::Array{<:Number}
 end
 
 function remove(
-    img::Matrix{<:Colorant}; session::Union{InferenceSession,Nothing}=nothing
+    img::Matrix{<:Colorant};
+    session::Union{InferenceSession,Nothing}=nothing,
+    only_mask::Bool=false,
 )::Matrix{<:Colorant}
     # get onnx session
     if isnothing(session)
@@ -56,7 +58,11 @@ function remove(
     # get cutouts from all masks
     cutouts = []
     for mask in masks
-        cutout = naive_cutout(img, mask)
+        if only_mask
+            cutout = mask
+        else
+            cutout = naive_cutout(img, mask)
+        end
         push!(cutouts, cutout)
     end
 
