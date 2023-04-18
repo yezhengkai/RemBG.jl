@@ -1,7 +1,6 @@
 using RemBG
 using Test
 using RemBG.Images
-using ReferenceTests
 
 @testset "Model type" begin
     @test isa(U2Net, RemBG.U2NetModel)
