@@ -158,6 +158,9 @@ function predict(session::ClothSession, img::Matrix{<:Colorant})
     pred = dropdims(pred; dims=1) # size: (4, 768, 768)
 
     mask = imresize(pred, 4, size(img)...)
+    mask_upper = colorview(Gray, mask[2, :, :])
+    mask_lower = colorview(Gray, mask[3, :, :])
+    mask_full = colorview(Gray, mask[4, :, :])
 
-    return [mask[2, :, :], mask[3, :, :], mask[4, :, :]]
+    return [mask_upper, mask_lower, mask_full]
 end
