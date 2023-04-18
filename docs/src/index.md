@@ -4,11 +4,4 @@ CurrentModule = RemBG
 
 # RemBG
 
-Documentation for [RemBG](https://github.com/yezhengkai/RemBG.jl).
-
-```@index
-```
-
-```@autodocs
-Modules = [RemBG]
-```
+This is a Julia implementation of the python package [rembg](https://github.com/danielgatis/rembg).

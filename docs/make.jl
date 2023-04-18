@@ -14,7 +14,10 @@ makedocs(;
         edit_link="main",
         assets=String[],
     ),
-    pages=["Home" => "index.md"],
+    pages=[
+        "Home" => "index.md",
+        "Reference" => ["reference/public.md", "reference/internal.md"],
+    ],
 )
 
 deploydocs(; repo="github.com/yezhengkai/RemBG.jl", devbranch="main")
