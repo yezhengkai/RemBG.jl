@@ -3,7 +3,7 @@ function alpha_matting_cutout(
 ) end
 
 function naive_cutout(img, mask)
-    cutout = colorview(RGB, img .* channelview(mask))
+    cutout = colorview(RGBA, RGBA.(img) .* channelview(mask))
     return cutout
 end
 
