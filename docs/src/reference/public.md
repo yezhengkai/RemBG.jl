@@ -13,6 +13,8 @@ Pages = ["public.md"]
 ```@docs
 remove
 new_session
+set_onnx_execution_provider
+get_onnx_execution_provider
 U2Net
 U2Netp
 U2NetClothSeg

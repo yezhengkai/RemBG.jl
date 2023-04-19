@@ -6,6 +6,7 @@ SILUETA_ONNX_PATH = joinpath(artifact"silueta", "silueta.onnx")
 ISNET_GENERAL_USE_ONNX_PATH = joinpath(
     artifact"isnet-general-use", "isnet-general-use.onnx"
 )
+const EXECUTION_PROVIDER = Ref{Symbol}(:cpu)
 
 abstract type MattingModel end
 struct U2NetModel <: MattingModel end
@@ -49,6 +50,30 @@ struct DisSession <: InferenceSession
 end
 
 """
+    get_onnx_execution_provider()
+
+Get the current execution provider for the ONNX inference session.
+"""
+function get_onnx_execution_provider()
+    return EXECUTION_PROVIDER[]
+end
+
+"""
+    set_onnx_execution_provider(execution_provider::Symbol)
+
+Set the execution provider for ONNX inference session. Now the "execution_provider" only accepts ":cpu" and ":cuda".
+"""
+function set_onnx_execution_provider(execution_provider::Symbol)
+    if execution_provider === :cpu
+        EXECUTION_PROVIDER[] = execution_provider
+    elseif execution_provider === :cuda
+        EXECUTION_PROVIDER[] = execution_provider
+    else
+        error("Unsupported execution_provider $execution_provider")
+    end
+end
+
+"""
     new_session(::MattingModel)
 
 Constructs an `InferenceSession` object by input type.
@@ -59,22 +84,45 @@ session = new_session(U2Net)
 ```
 """
 function new_session(::U2NetModel)
-    return SimpleSession("U2Net", OX.load_inference(U2NET_ONNX_PATH))
+    return SimpleSession(
+        "U2Net", OX.load_inference(U2NET_ONNX_PATH; execution_provider=EXECUTION_PROVIDER[])
+    )
 end
 function new_session(::U2NetpModel)
-    return SimpleSession("U2Netp", OX.load_inference(U2NETP_ONNX_PATH))
+    return SimpleSession(
+        "U2Netp",
+        OX.load_inference(U2NETP_ONNX_PATH; execution_provider=EXECUTION_PROVIDER[]),
+    )
 end
 function new_session(::U2NetClothSegModel)
-    return ClothSession("U2NetClothSeg", OX.load_inference(U2NET_CLOTH_SEG_ONNX_PATH))
+    return ClothSession(
+        "U2NetClothSeg",
+        OX.load_inference(
+            U2NET_CLOTH_SEG_ONNX_PATH; execution_provider=EXECUTION_PROVIDER[]
+        ),
+    )
 end
 function new_session(::U2NetHumanSegModel)
-    return SimpleSession("U2NetHumanSeg", OX.load_inference(U2NET_HUMAN_SEG_ONNX_PATH))
+    return SimpleSession(
+        "U2NetHumanSeg",
+        OX.load_inference(
+            U2NET_HUMAN_SEG_ONNX_PATH; execution_provider=EXECUTION_PROVIDER[]
+        ),
+    )
 end
 function new_session(::SiluetaModel)
-    return SimpleSession("Silueta", OX.load_inference(SILUETA_ONNX_PATH))
+    return SimpleSession(
+        "Silueta",
+        OX.load_inference(SILUETA_ONNX_PATH; execution_provider=EXECUTION_PROVIDER[]),
+    )
 end
 function new_session(::ISNetGeneralUseModel)
-    return DisSession("ISNetGeneralUse", OX.load_inference(ISNET_GENERAL_USE_ONNX_PATH))
+    return DisSession(
+        "ISNetGeneralUse",
+        OX.load_inference(
+            ISNET_GENERAL_USE_ONNX_PATH; execution_provider=EXECUTION_PROVIDER[]
+        ),
+    )
 end
 
 function predict(session::SimpleSession, img::Matrix{<:Colorant})
