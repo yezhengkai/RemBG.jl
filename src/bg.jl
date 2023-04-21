@@ -9,7 +9,17 @@ end
 
 function post_process(mask) end
 
-function apply_background_color(img, color) end
+function apply_background_color(img, color)
+    img_size = size(img)
+    r = fill(color[1] / 255, img_size)
+    g = fill(color[2] / 255, img_size)
+    b = fill(color[3] / 255, img_size)
+    a = fill(color[4] / 255, img_size)
+    bg = colorview(RGBA{Float32}, r, g, b, a)
+    mask = alpha.(img)
+    bg = clamp01!(bg .* (1 .- mask) + img .* mask)
+    return bg
+end
 
 """
     remove(img; kwargs...)
@@ -46,10 +56,11 @@ function remove(
     img::Matrix{<:Colorant};
     session::Union{InferenceSession,Nothing}=nothing,
     only_mask::Bool=false,
+    bgcolor::Union{Tuple{Int,Int,Int,Int},Nothing}=nothing,
 )::Matrix{<:Colorant}
     # get onnx session
     if isnothing(session)
-        session = new_session(U2Netp)
+        session = new_session(U2Net)
     end
 
     # predict mask
@@ -72,6 +83,9 @@ function remove(
     end
 
     # apply background color
+    if !isnothing(bgcolor) && !only_mask
+        cutout = apply_background_color(cutout, bgcolor)
+    end
 
     return cutout
 end
