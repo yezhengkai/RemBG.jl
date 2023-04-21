@@ -53,6 +53,8 @@ end
     get_onnx_execution_provider()
 
 Get the current execution provider for the ONNX inference session.
+
+See also [`set_onnx_execution_provider`](@ref).
 """
 function get_onnx_execution_provider()
     return EXECUTION_PROVIDER[]
@@ -62,6 +64,8 @@ end
     set_onnx_execution_provider(execution_provider::Symbol)
 
 Set the execution provider for ONNX inference session. Now the "execution_provider" only accepts ":cpu" and ":cuda".
+
+See also [`get_onnx_execution_provider`](@ref).
 """
 function set_onnx_execution_provider(execution_provider::Symbol)
     if execution_provider === :cpu
