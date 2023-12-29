@@ -11,5 +11,5 @@ ONNXRunTime = "e034b28e-924e-41b2-b98f-d2bbeb830c6a"
 
 [compat]
 Images = "0.25"
-ONNXRunTime = "0.3"
+ONNXRunTime = "0.3, 1"
 julia = "1"
